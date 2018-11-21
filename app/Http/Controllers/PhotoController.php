@@ -63,7 +63,7 @@ class PhotoController extends Controller
 
         foreach ($images as $image)
         {
-            if ((!($image=="."||$image==".."||$image=="ico")) and (intval($image)==$id))
+            if ((!($image=="."||$image==".."||$image=="ico")) and $image==$id)
             {
                 $coord=$this->read_gps(public_path('\\files\\photos\\').$image);
                 $img=['name'=>$image,'url' =>('\\files\\photos\\'), 'geo' => $coord];
