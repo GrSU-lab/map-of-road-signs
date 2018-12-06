@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use FileManager\FileManager;
 use Illuminate\Http\Request;
 use Grimzy\LaravelMysqlSpatial\Types\Point;
 use App\Photo;
@@ -10,31 +11,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class PhotoController extends Controller
 {
-    public function index()
-    {
-		$photos = [
-		    [
-			    'id' => 1,
-				'imageSrc' => url('files/photo/1.jpg'),
-				'thumbnail' => url('files/photo/thumbnail/1.jpg'),
-				'coordinates' => [
-				    53.6879952,
-					23.8496112
-				]
-			],
-			[
-			    'id' => 2,
-				'imageSrc' => url('files/photo/2.jpg'),
-				'thumbnail' => url('files/photo/thumbnail/2.jpg'),
-				'coordinates' => [
-				    53.6654619,
-					23.8232123
-				]
-			]
-		];
-		
-		return response()->json($photos);
-	}
+
 
     public function showall()
     {
@@ -113,6 +90,10 @@ class PhotoController extends Controller
     public function create()
     {
         return view('photos.upload');
+    }
+    public function add()
+    {
+        return view('demo');
     }
 
     public function createIcon($image_path, $image_name)

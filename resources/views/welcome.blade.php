@@ -5,21 +5,42 @@
     <title>Page Title</title>
 </head>
 <body>
+{{ csrf_field() }}
+<script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=pjfftizzvelgx3o59hbh1le630911saqeuzd6i99ycidt05m"></script>
+<textarea name="content" class="form-control my-editor"></textarea>
+<script>
+    var editor_config = {
+        path_absolute : "/",
+        selector: "textarea.my-editor",
+        plugins: [
+            "image",
 
+        ],
+        toolbar: "image",
+        relative_urls: false,
+        file_browser_callback : function(field_name, url, type, win) {
+            var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+            var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
 
+            var cmsURL = editor_config.path_absolute + 'laravel-filemanager?field_name=' + field_name;
+            if (type == 'image') {
+                cmsURL = cmsURL + "&type=Images";
+            } else {
+                cmsURL = cmsURL + "&type=Files";
+            }
 
-<?php phpinfo(); ?>
+            tinyMCE.activeEditor.windowManager.open({
+                file : cmsURL,
+                title : 'Filemanager',
+                width : x * 0.8,
+                height : y * 0.8,
+                resizable : "yes",
+                close_previous : "no"
+            });
+        }
+    };
 
-<script type="text/javascript" src="\assets\js\jquery.js"></script>
-<script type="text/javascript" src="\assets\js\jquery.colorbox-min.js"></script>
-
-
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
-<label for="feature_image">Feature Image</label>
-<input type="text" id="feature_image" name="feature_image" value="">
-<a href="" class="popup_selector" data-inputid="feature_image">Select Image</a>
-
-<script type="text/javascript" src="/packages/barryvdh/elfinder/js/standalonepopup.min.js"></script>
+    tinymce.init(editor_config);
+</script>
 </body>
 </html>
