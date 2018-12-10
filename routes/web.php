@@ -11,13 +11,15 @@
 |
 */
 
-/*
-Route::get('/', function () {
-    return view('welcome');
-});
-*/
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::view('/{path?}', 'app');
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::post('/lights/post','TrafficLightController@store');
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

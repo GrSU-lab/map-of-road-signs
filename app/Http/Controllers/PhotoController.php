@@ -15,19 +15,25 @@ class PhotoController extends Controller
 
     public function showall()
     {
-        $dir = public_path('\\files\\photos\\');
+        $dir = public_path('\\files\\photos\\gpsPhoto\\');
         $images = scandir($dir);
 
         $arr=[];
 
         foreach ($images as $image)
         {
-            if (!($image=="."||$image==".."||$image=="ico"))
-            {
-                $coord=$this->read_gps(public_path('\\files\\photos\\').$image);
-                $img=['name'=>$image,'url' =>('\\files\\photos\\'), 'geo' => $coord];
-                array_push($arr, $img);
+            if (!($image=="."||$image==".."||$image=="ico")) {
+                $file=public_path('\\files\\photos\\gpsPhoto\\'.$image);
+                if (is_file($file))
+                {
+                if (exif_read_data(public_path('\\files\\photos\\gpsPhoto\\') . $image)) {
+                    $coord = $this->read_gps(public_path('\\files\\photos\\gpsPhoto\\') . $image);
+                    $img = ['name' => $image, 'url' => ('\\files\\photos\\gpsPhoto\\'), 'geo' => $coord];
+                    array_push($arr, $img);
+                }
+                }
             }
+
         }
         $photos=json_encode($arr);
         return view('photos.index', compact('photos'));
@@ -35,15 +41,15 @@ class PhotoController extends Controller
     public function showid($id)
     {
 
-        $dir = public_path('\\files\\photos\\');
+        $dir = public_path('\\files\\photos\\gpsPhoto\\');
         $images = scandir($dir);
 
         foreach ($images as $image)
         {
             if ((!($image=="."||$image==".."||$image=="ico")) and $image==$id)
             {
-                $coord=$this->read_gps(public_path('\\files\\photos\\').$image);
-                $img=['name'=>$image,'url' =>('\\files\\photos\\'), 'geo' => $coord];
+                $coord=$this->read_gps(public_path('\\files\\photos\\gpsPhoto\\').$image);
+                $img=['name'=>$image,'url' =>('\\files\\photos\\gpsPhoto\\'), 'geo' => $coord];
             }
         }
 
@@ -100,24 +106,24 @@ class PhotoController extends Controller
     {
         $img_resize = Image::make($image_path)->resize(300, 300);
 
-        $img_resize->save(public_path('\\files\\photos\\ico\\' .$image_name));
+        $img_resize->save(public_path('\\files\\photos\\gpsPhoto\\ico\\' .$image_name));
     }
 
 
     public function delete($id)
     {
 
-        unlink(public_path('\\files\\photos\\').$id);
-        unlink(public_path('\\files\\photos\\ico\\').$id);
+        unlink(public_path('\\files\\photos\\gpsPhoto\\').$id);
+        unlink(public_path('\\files\\photos\\gpsPhoto\\ico\\').$id);
         return redirect('/');
     }
 
     public function loadImg()
     {
         $imageName = time().'.'.request()->input_img->getClientOriginalExtension();
-        request()->input_img->move(public_path('\\files\\photos\\'), $imageName);
+        request()->input_img->move(public_path('\\files\\photos\\gpsPhoto\\'), $imageName);
 
-        $photoPath = addslashes(public_path('files\\photos')."\\".$imageName);
+        $photoPath = addslashes(public_path('files\\photos\\gpsPhoto')."\\".$imageName);
         $this->createIcon($photoPath, $imageName);
 
         return redirect('/')->with('success', 'Image Upload successfully');

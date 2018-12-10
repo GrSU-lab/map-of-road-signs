@@ -16,7 +16,7 @@ class CreateLightsTable extends Migration
         Schema::create('lights', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->point('location')->nullable();
+            $table->point('coordinate')->nullable();
             $table->timestamps();
         });
     }
