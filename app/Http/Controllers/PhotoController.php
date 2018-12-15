@@ -28,7 +28,8 @@ class PhotoController extends Controller
                 {
                 if (exif_read_data(public_path('\\files\\photos\\gpsPhoto\\') . $image)) {
                     $coord = $this->read_gps(public_path('\\files\\photos\\gpsPhoto\\') . $image);
-                    $img = ['name' => $image, 'url' => ('\\files\\photos\\gpsPhoto\\'), 'geo' => $coord];
+                    if($coord==false) {continue;}
+                    $img = ['name' => $image, 'url' => ('\\files\\photos\\gpsPhoto\\'), 'gps' => $coord];
                     array_push($arr, $img);
                 }
                 }
@@ -48,12 +49,16 @@ class PhotoController extends Controller
         {
             if ((!($image=="."||$image==".."||$image=="ico")) and $image==$id)
             {
+
                 $coord=$this->read_gps(public_path('\\files\\photos\\gpsPhoto\\').$image);
-                $img=['name'=>$image,'url' =>('\\files\\photos\\gpsPhoto\\'), 'geo' => $coord];
+               if($coord==false) {continue;}
+                $img=['name'=>$image,'url' =>('\\files\\photos\\gpsPhoto\\'), 'gps' => $coord];
             }
         }
-
-        $photo=json_encode($img);
+        if(!empty($img)) {
+            $photo = json_encode($img);
+        }
+        else return 'Photo not found!';
         return view('photos.index_one', compact('photo'));
 
     }
@@ -82,13 +87,16 @@ class PhotoController extends Controller
     function read_gps($file)
     {
         if (is_file($file)) {
-            $exif = exif_read_data($file);
-            $lon = $this->getGps($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
-            $lat = $this->getGps($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
-            return array(
-                $lat,
-                $lon
-            );
+            try {
+                $exif = exif_read_data($file);
+                $lon = $this->getGps($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
+                $lat = $this->getGps($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
+                return array(
+                    $lat,
+                    $lon
+                );
+            }
+             catch (\Exception $e) {return false;}
         }
         return false;
     }

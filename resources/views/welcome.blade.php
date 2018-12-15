@@ -23,25 +23,11 @@
           </span>
                 <input id="thumbnail" class="form-control" type="text" name="filepath">
             </div>
-            <img id="holder" style="margin-top:15px;max-height:100px;">
-            <h2>Standalone File Button</h2>
-            <div class="input-group">
-          <span class="input-group-btn">
-            <a id="lfm2" data-input="thumbnail2" data-preview="holder2" class="btn btn-primary">
-              <i class="fa fa-picture-o"></i> Choose
-            </a>
-          </span>
-                <input id="thumbnail2" class="form-control" type="text" name="filepath">
-            </div>
+
             <img id="holder2" style="margin-top:15px;max-height:100px;">
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Embed file manager</h2>
-            <iframe src="/laravel-filemanager" style="width: 100%; height: 500px; overflow: hidden; border: none;"></iframe>
-        </div>
-    </div>
+
 </div>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -62,7 +48,20 @@
     $('#lfm2').filemanager('file', {prefix: route_prefix});
 </script>
 
+<form action="http://localhost/web/lights/post">
 
+    <p>
+        <input name="name">
+        <input  name="coordinate">
+        <input  name="created_at">
+        <input  name="updated_at">
+        <input  name="images">
+
+        <input type="hidden" name="_method" value="POST">Отправить<Br>
+
+      </p>
+    <p><input type="submit"></p>
+</form>
 
 </body>
 </html>
